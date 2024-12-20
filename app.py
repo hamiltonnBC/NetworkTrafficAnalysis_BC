@@ -14,7 +14,7 @@ def create_app():
     Create and configure the Dash app with the prepared data.
     """
     app = dash.Dash(__name__, suppress_callback_exceptions=True)
-
+    server = app.server
     app.layout = html.Div([
         dcc.Location(id='url', refresh=False),
         html.H1('Network Traffic Analysis Dashboard'),
@@ -832,7 +832,9 @@ def main():
     Main function to run the Dash app.
     """
     app = create_app()
-    app.run_server(debug=True)
+    # app.run_server(debug=True)
+    port = int(os.environ.get('PORT', 8080))
+    app.run_server(debug=False, host='0.0.0.0', port=port)
 
 if __name__ == '__main__':
     main()

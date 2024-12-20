@@ -1,63 +1,56 @@
 from base64 import b64encode
 import dash
-from dash import dcc, html
+from dash import dcc, html  # Updated import
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.graph_objs as go
-import dash_html_components as html
-import dash_core_components as dcc
-import os
 import dash_bootstrap_components as dbc
+import os
 
-def create_app():
-    """
-    Create and configure the Dash app with the prepared data.
-    """
-    app = dash.Dash(__name__, suppress_callback_exceptions=True)
-    server = app.server
-    app.layout = html.Div([
-        dcc.Location(id='url', refresh=False),
-        html.H1('Network Traffic Analysis Dashboard'),
-        dcc.Tabs([
-            dcc.Tab(label='Overview', value='/overview'),
-            dcc.Tab(label='Protocol Distribution', value='/protocol-distribution'),
-            dcc.Tab(label='Security Concerns', value='/security-concerns'),
-            #dcc.Tab(label='Traffic Patterns', value='/traffic-patterns'),
-            dcc.Tab(label='IP & Port Analysis', value='/ip-port-analysis'),
-            dcc.Tab(label='Anomaly Analysis', value='/anomaly-analysis'),
-            dcc.Tab(label='Methodology', value='/methodology'),
-            dcc.Tab(label='Conclusion', value='/conclusion'),
-            dcc.Tab(label='Meet the Team & Sources', value='/team'),
-        ], id='tabs', value='/overview'),
+# Create the Dash app
+app = dash.Dash(__name__, suppress_callback_exceptions=True)
+server = app.server  # This needs to be at module level for Gunicorn
 
-        html.Div(id='page-content')
-    ])
+# Define the app layout
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.H1('Network Traffic Analysis Dashboard'),
+    dcc.Tabs([
+        dcc.Tab(label='Overview', value='/overview'),
+        dcc.Tab(label='Protocol Distribution', value='/protocol-distribution'),
+        dcc.Tab(label='Security Concerns', value='/security-concerns'),
+        dcc.Tab(label='IP & Port Analysis', value='/ip-port-analysis'),
+        dcc.Tab(label='Anomaly Analysis', value='/anomaly-analysis'),
+        dcc.Tab(label='Methodology', value='/methodology'),
+        dcc.Tab(label='Conclusion', value='/conclusion'),
+        dcc.Tab(label='Meet the Team & Sources', value='/team'),
+    ], id='tabs', value='/overview'),
+    html.Div(id='page-content')
+])
 
-    @app.callback(Output('page-content', 'children'), Input('tabs', 'value'))
-    def display_page(tab):
-        if tab == '/overview':
-            return create_overview_layout()
-        elif tab == '/protocol-distribution':
-            return create_protocol_distribution_layout()
-        elif tab == '/security-concerns':
-            return create_security_concerns_layout()
-        elif tab == '/traffic-patterns':
-            return create_traffic_patterns_layout()
-        elif tab == '/ip-port-analysis':
-            return create_ip_port_analysis_layout()
-        elif tab == '/methodology':
-            return create_methodology_layout()
-        elif tab == '/conclusion':
-            return create_conclusion_layout()
-        elif tab == '/anomaly-analysis':
-            return create_anomaly_detection_layout()
-        elif tab == '/team':
-            return create_team_layout()
-        else:
-            return '404'
-
-    return app
-
+# Keep your existing callback and layout functions
+@app.callback(Output('page-content', 'children'), Input('tabs', 'value'))
+def display_page(tab):
+    if tab == '/overview':
+        return create_overview_layout()
+    elif tab == '/protocol-distribution':
+        return create_protocol_distribution_layout()
+    elif tab == '/security-concerns':
+        return create_security_concerns_layout()
+    elif tab == '/traffic-patterns':
+        return create_traffic_patterns_layout()
+    elif tab == '/ip-port-analysis':
+        return create_ip_port_analysis_layout()
+    elif tab == '/methodology':
+        return create_methodology_layout()
+    elif tab == '/conclusion':
+        return create_conclusion_layout()
+    elif tab == '/anomaly-analysis':
+        return create_anomaly_detection_layout()
+    elif tab == '/team':
+        return create_team_layout()
+    else:
+        return '404'
 
 def create_overview_layout():
     """
@@ -65,7 +58,6 @@ def create_overview_layout():
     """
     return html.Div([
         html.H2('Overview'),
-
         html.H2('Welcome to our Network Traffic Analysis Dashboard!'),
         html.P(
             "This project focuses on the capture and analysis of network traffic packets in a secure virtual environment. Using virtual machines and tools like QEMU alongside the CMU GHOSTS program, we simulate user activity to ethically collect and analyze packet data."),
@@ -73,8 +65,6 @@ def create_overview_layout():
             "Our analysis leverages Python libraries such as Scapy and Pandas to identify trends, outliers, and potential security vulnerabilities. We also employ the Isolation Forest machine learning algorithm for advanced anomaly detection. Key findings include the prevalence of insecure encryption protocols and the detection of cleartext passwords, highlighting the hidden risks in network communications."),
         html.P(
             "This dashboard visualizes our insights, empowering users to understand the complexities of their network traffic and the importance of robust online security practices."),
-
-        # Use dcc.Graph to create a side-by-side layout
         dcc.Graph(
             figure={
                 'data': [],
@@ -134,8 +124,6 @@ def create_overview_layout():
             style={'height': '1000px'}
         )
     ])
-
-
 
 def create_protocol_distribution_layout():
     """
@@ -827,14 +815,6 @@ def create_anomaly_detection_layout():
         ])
     ])
 
-def main():
-    """
-    Main function to run the Dash app.
-    """
-    app = create_app()
-    # app.run_server(debug=True)
+if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
     app.run_server(debug=False, host='0.0.0.0', port=port)
-
-if __name__ == '__main__':
-    main()

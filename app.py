@@ -1,15 +1,12 @@
 from base64 import b64encode
-
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
-import plotly.express as px
 import pandas as pd
-#import plotly.graph_objects as go
 import plotly.graph_objs as go
 import dash_html_components as html
 import dash_core_components as dcc
-
+import os
 import dash_bootstrap_components as dbc
 
 def create_app():

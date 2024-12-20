@@ -1,0 +1,140 @@
+Network Traffic Analysis Report
+===============================
+
+1. Basic Statistics
+-------------------
+Total packets analyzed: 5933
+Time range: 2024-10-02 16:15:45.183698 to 2024-10-02 16:17:14.265418
+Duration: 0.02 hours
+Unique IP sources: 55
+Unique IP destinations: 54
+Average packet size: 751.43 bytes
+Median packet size: 402.00 bytes
+Minimum packet size: 54 bytes
+Maximum packet size: 13854 bytes
+
+2. Protocol Distribution
+------------------------
+- Ethernet: 5933 packets (100.00%)
+- IP: 5919 packets (99.76%)
+- TCP: 3664 packets (61.76%)
+- ARP: 14 packets (0.24%)
+- UDP: 2252 packets (37.96%)
+- QUIC: 2075 packets (34.97%)
+- ICMP: 3 packets (0.05%)
+
+3. QUIC Analysis
+-----------------
+QUIC percentage: 25.97%
+
+4. TCP Analysis
+-----------------
+TCP Flags distribution:
+- PA: 1533 packets (25.84%)
+- A: 1894 packets (31.92%)
+- FA: 74 packets (1.25%)
+- S: 66 packets (1.11%)
+- SA: 66 packets (1.11%)
+- RA: 7 packets (0.12%)
+- R: 24 packets (0.40%)
+
+5. Security Analysis
+---------------------
+a) General Security Issues:
+- WARNING: 9 packets using insecure SSLv2 detected!
+- SUMMARY: Of the analyzed packets:
+-   - 100.00% use SSLv2
+-   - 0.00% use weak ciphers
+-   - 0.00% use unknown ciphers
+-   - 0 FTP authentication packets detected
+
+b) SSLv2 Usage (Deprecated and Insecure):
+Total SSLv2 packets: 9
+Unique SSLv2 Sources: 34.36.213.229, 18.161.156.14, 34.149.100.209, 142.250.114.91, 23.40.145.4
+Unique SSLv2 Destinations: 192.168.122.5
+
+c) Non-encrypted Traffic:
+Total non-encrypted packets: 398 (6.71% of total)
+
+d) Weak Cipher Usage:
+Packets using weak ciphers: 0 (0.00% of total)
+
+e) Unknown Cipher Usage:
+Packets using unknown ciphers: 0 (0.00% of total)
+
+6. Traffic Patterns
+-------------------
+Peak traffic hour: 2024-10-02 16:00:00
+Packets in peak hour: 8008.0
+Bytes in peak hour: 6421206.0
+
+7. IP Analysis
+---------------
+Top 10 source IPs:
+- 192.168.122.5: 2022 packets (34.08%)
+- 142.250.114.91: 765 packets (12.89%)
+- 23.221.24.56: 700 packets (11.80%)
+- 34.149.100.209: 507 packets (8.55%)
+- 173.222.54.173: 265 packets (4.47%)
+- 18.161.156.14: 258 packets (4.35%)
+- 34.36.213.229: 135 packets (2.28%)
+- 142.250.113.95: 126 packets (2.12%)
+- 192.168.122.1: 88 packets (1.48%)
+- 34.160.144.191: 80 packets (1.35%)
+
+Top 10 destination IPs:
+- 192.168.122.5: 3897 packets (65.68%)
+- 23.221.24.56: 243 packets (4.10%)
+- 34.149.100.209: 224 packets (3.78%)
+- 173.222.54.173: 221 packets (3.72%)
+- 142.250.114.91: 161 packets (2.71%)
+- 18.161.156.14: 132 packets (2.22%)
+- 142.250.113.95: 93 packets (1.57%)
+- 192.168.122.1: 85 packets (1.43%)
+- 35.193.17.96: 64 packets (1.08%)
+- 34.36.213.229: 61 packets (1.03%)
+
+8. Port Analysis
+-----------------
+Top 10 TCP ports:
+- 443: 3453 packets (58.20%)
+- 49729: 731 packets (12.32%)
+- 49831: 364 packets (6.14%)
+- 49838: 182 packets (3.07%)
+- 80: 181 packets (3.05%)
+- 49845: 140 packets (2.36%)
+- 49734: 134 packets (2.26%)
+- 49751: 96 packets (1.62%)
+- 49835: 90 packets (1.52%)
+- 49832: 89 packets (1.50%)
+
+Top 10 UDP ports:
+- 443: 2082 packets (35.09%)
+- 52081: 888 packets (14.97%)
+- 64869: 837 packets (14.11%)
+- 53: 170 packets (2.87%)
+- 65244: 88 packets (1.48%)
+- 64868: 35 packets (0.59%)
+- 63934: 32 packets (0.54%)
+- 62754: 21 packets (0.35%)
+- 50379: 20 packets (0.34%)
+- 63933: 19 packets (0.32%)
+
+9. ARP Analysis
+-----------------
+- Operation 1: 7 packets (0.12%)
+- Operation 2: 7 packets (0.12%)
+
+10. ICMP Analysis
+------------------
+- Type 3: 3 packets (0.05%)
+
+11. HTTP Methods
+------------------
+- POST: 10 packets (0.17%)
+
+12. Additional Insights
+-----------------------
+Average packets per second: 66.60
+Average bytes per second: 72082.20
+Analysis completed in: 12.10 seconds

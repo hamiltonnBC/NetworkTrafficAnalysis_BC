@@ -1,0 +1,12 @@
+numpy
+pandas
+matplotlib
+seaborn
+pyshark
+scapy
+tqdm
+scikit-learn
+cryptography
+plotly
+dash
+dash_bootstrap_components

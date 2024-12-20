@@ -1,0 +1,141 @@
+
+1. Title
+2. Introduction
+
+
+
+Our project revolves around the capture of network traffic packets and their 
+analysis. 
+
+So, we used virtual machines, or VMs, for packet capture. After we had the 
+captures, we created a dashboard to visualize properties of the packets.
+
+Our goals are to identify trends and outliers, while ethically (legally) 
+collecting packets.
+
+3. Background and Motivation
+
+Such analysis is important, as it is vital in providing a better understanding 
+of what is happening behind closed doors. Many people what their packets look 
+like after it leaving their device.
+
+There is also a lot of information you can determine about a packet, also, 
+without looking at its data. A simple example is just looking at the amount of 
+network activity to determine the size of a file, or spikes in activity to 
+figure out your habits.
+
+- Capturing other people's packets is wiretapping; certain institutions, like 
+the college, ban the use of packet captures in any form.
+- Packets are the smallest unit of transfer on computer networks, right before 
+individual bits. When two computers communicate, they send one packet at a time. 
+To capture real packets would require tons of permission.
+
+4. Problem statement
+
+First, we want to know what you can see without reading the packet's content. 
+Second, how can one virtualize packet collection, to avoid wiretapping?
+
+Limitations: To be clear, we are not looking at packet content (save to a 
+limited extent with broadcasts and checking for cleartext passwords). There is 
+also no live user data. Finally, you can only run so many virtual machines on a 
+consumer grade laptop, so the quality of the data is limited. 
+
+5. Methodology
+
+We used CMU's GHOSTS program to simulate user activity, as well as some manual 
+interaction to stuff in other virtual machines to spice up the network.
+
+We used QEMU for virtualization and associated Linux tools.
+We used Python for our analysis pipeline. Key libraries included:
+
+Scapy: For packet capture and analysis
+Pandas: For data manipulation and processing
+Pyshark: To detect QUIC packets
+Dash: To create the web-based dashboard
+Plotly: For interactive data visualizations
+
+6. Architecture & Design
+
+The protocol stack functions a lot like a class hirearchy. IP extends ether 
+(ethernet, or IP, or whatever hardware protocol is being used), and UDP and TCP 
+extend IP. HTTP would be website content (though HTTPS would extend TLS). We are 
+simply looking for classes in a class tree.
+
+The Virtual machine archatecture is a bit more complex. You have a few types, 
+and they all run on top of QEMU (Quick Emulator, a common Linux VM), which then 
+runs on top of the linux kernel. Over here, you have a virtual, fake software 
+network adapter, virtual bridge 0, through which all the virtual machines must 
+connect. Thus I can connect wireshark to siphon traffic from that interface 
+specifically.
+
+The entire VM system is controlled with libvirt management tools such as 
+virt-manager or virsh.
+
+7. 
+
+We noticed that there is a singificnat amount of traffic that uses insecure 
+encryption protocols, oudated version with known vulnerabilities. There is also 
+a certain number of passwords detected in cleartext packets.
+
+Some websites use insecure protocols because they can't be bothered to upgrade, 
+so that could also be it - it could also be Windows. We didn't have the time it 
+isolate the cause.
+
+FIXME
+
+8. Challenges and Solutions
+
+
+We were somewhat stumped as to how to make the virtual machine traffic as 
+realistic as possible. Also, we were having trouble configuring a virtual 
+network adapter. FIXME
+
+The resolution to these issues turned out to be unremarkable. We used GHOSTS in 
+addition to some manual interaction with the virutal machine network. As far as 
+the virtual network adapter is concerned, the primary cause of our troubles was 
+the firewall (we believe it has something to do with the versions of the system 
+management protocols they used), which was resolved by just switching out for a 
+more configurable firewall. FIXME
+
+Python Script Challenges:
+Understanding network protocols and packet structures
+Installing and setting up Python libraries (Scapy, Pandas, Pyshark, Dash, Plotly)
+Learning how to use Scapy to read and analyze PCAPNG files
+Understanding and working with Pandas DataFrames for data manipulation
+Figuring out how to extract relevant information from packet structures
+Implementing logic to categorize packets and detect potential security issues
+Handling large datasets efficiently given I only have 8GB of RAM
+Learning Dash framework basics to create a web application
+Debugging errors in both the analysis script and the dashboard code
+
+
+
+9. Conclusion
+
+We simulated network traffic in a virtual environment, and analysed the results.
+
+Key takeaways: your network traffic is more vulnerable than you think. 
+Encryption doesn't hide everythign.
+
+
+...
+
+Disable outdated security policies in Windows, use a VPN (not a free one), 
+potentially run one of those windows debloating scripts (probably against 
+college policy, but hey, pretty much everything is - control freaks, the lot of 
+them)
+
+in firefox, set security.tls.version.min to 4 and security.tls.version.max to 4.
+However, this will break some websites, since not everyone is using TLSv3. 
+Setting security.tls.version.min to 3 might be enough of a compromise.
+
+...
+
+Linus Torvalds, the creator and lead developer of the Linux Kernel, had gripes 
+with "hard to install linux distributions".
+
+https://fossbytes.com/linus-torvalds-doesnt-use-ubuntu-linux-debian/
+"I’m sorry, you may want to close your ears now, I want a distribution to be 
+easy to install, so that I can just get on with my life, which is mostly 
+kernel."
+

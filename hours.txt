@@ -1,0 +1,75 @@
+----- Week 2 ----
+
+Target: 6 hours
+
+
+Start: 8:50
+End: 11:50
+- 3 hours attempting to get virtual machine networking working the way I want it 
+to. The main issue that I am running up against is properly configuring the 
+virtual machines - they cannot connect to the internet. I finally found out that 
+a reason for this may lie in my specific firewall usecase, by using ufw, or in 
+the not-using of firewalld. Many places gave me the runaround, and I tried 
+disabling multible services and etc. - but what I didn't do? I didn't restart 
+after disabling the firewall. Hehe. That costed me some time.
+
+12:50 -> 1:20
+- 0.5 hours: fixed the issue. Probably had something to do with UFW overwriting 
+the iptable rules or something, which was fixed by installing firewalld, which 
+uses nftables and namespaces. Now networking works, and debian is chugging 
+along, being installed in the background.
+
+From 2:00 to 2:15
+Then 2:45 to 3:15
+
+Started provisioning some virtual machines. Creating four, two users and two 
+servers. There will be a mail/dns server and a http/ftp server. Could have done 
+more, but I didn't want to run around configuring everything. A basic capture 
+has been generated as experimetnal_vm_capture.pcapng in the root directory. 
+Surprised that it works so well - I literally just connect to the virtual 
+interface. The best thing is that I'm able to connect virtual machine to virtual 
+machine. Currently, the packet capture shows user0 connecting to an FTP server 
+in http-ftp anonymously and downloading a single file.
+
+IDEA: Detecting if someone is logging in as root remotely on one of our servers.
+
+
+We have decided to do data loss prevention and AI anomoly detection!
+
+
+From 10:00 -> 11:30 Tuesday
+- Exchnaged email with Jeremy Sutcliff, did some more research about wiretapping 
+laws.
+
+From 1:30 -> 5:15
+- Did research into CMU's "GHOSTS" software, which allows basically to have a 
+bunch of automated clients that try (*try*) to mimic real users. I still had 
+some VM configuration to do: I had to acquire a windows image, read the GHOSTS 
+documentation, provision a new VM for the GHOSTS API server, and then for a 
+while try and figure out what precisely we wanted to emulate as part of the user 
+side... Eventually, I just decided it was fine as it was, and ran a test with 
+some gently modified default configurations (to speed up web browsing, 
+primairally.) One interesting thing I learned: the delay time in milliseconds is 
+determined by the given value in the configuration file, multiplied by 2. This 
+was determined experimentally, nowhere it seems do they mention what the units 
+for the delay actually are.
+
+--- Week 3 ---
+
+In class: ran a packet capture with the virtual machine cluster. Got over a 
+million packets.
+
+8:45 -> 12:15
+3.5 hours
+Spent a while writing a draft document in a text file following the google 
+document listing out the requirements for the presentation. I had a few holes, 
+since I'm waiting for my partner to finish up his side, but it's overall 
+cohesive. Created a diagram with draw.io to illustrate the virtual machines and 
+the protocol stack. Went through the text document that I wrote and converted my 
+paragraphs into a few bullet points per slide. Exchanged some more email with 
+Jeremy - it looks like he's going to let us get some life packet captures, which 
+will be quite interesting, though not required for us. Extracted the GHOSTS 
+configurations from the virtual machine images and copied them to the repo. Also 
+added my libvirt configurations because why not.
+
+

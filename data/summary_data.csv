@@ -1,0 +1,39 @@
+total_packets,1122966
+unique_ip_sources,834
+unique_ip_destinations,835
+protocols_QUIC,71476
+protocols_Ethernet,1122966
+protocols_IP,1122168
+protocols_TCP,1013821
+protocols_UDP,107962
+protocols_ARP,699
+protocols_ICMP,367
+top_tcp_ports,"(443, 926458), (41250, 131485), (38010, 71003), (37998, 63729), (59378, 61692), (42089, 49995), (51954, 49995), (50897, 38722), (80, 26087), (50695, 19552)"
+top_udp_ports,"(443, 71317), (53, 36512), (62376, 15880), (49364, 4088), (62956, 4065), (61618, 3701), (55714, 2831), (53433, 2420), (57725, 2258), (63794, 2255)"
+tcp_flags_A,660771
+tcp_flags_PA,333913
+tcp_flags_FA,7809
+tcp_flags_S,4427
+tcp_flags_SA,4385
+tcp_flags_FPA,155
+tcp_flags_R,1905
+tcp_flags_RA,456
+top_ip_sources,"('192.168.122.88', 141073), ('192.168.122.71', 127026), ('192.168.122.5', 121325), ('192.168.122.12', 85586), ('185.199.111.133', 84374), ('209.85.165.202', 79702), ('146.75.41.140', 45763), ('142.251.32.78', 36946), ('142.251.41.72', 22321), ('192.168.122.1', 18338)"
+top_ip_destinations,"('192.168.122.5', 217854), ('192.168.122.88', 193005), ('192.168.122.71', 165173), ('192.168.122.12', 124118), ('209.85.165.202', 55030), ('185.199.111.133', 47149), ('142.251.32.78', 29031), ('146.75.41.140', 28975), ('192.168.122.1', 18536), ('34.117.121.53', 8555)"
+packet_size_stats_min,54
+packet_size_stats_max,65226
+packet_size_stats_mean,1030.0056854232164
+packet_size_stats_median,722.0
+arp_operations_1,355
+arp_operations_2,344
+icmp_types_3,351
+icmp_types_8,8
+icmp_types_11,7
+icmp_types_0,1
+quic_packets,71476
+quic_percentage,5.989982057541573
+non_encrypted_packets,125191
+sslv2_packets,6911
+weak_cipher_packets,0
+unknown_cipher_packets,0
+analysis_time,950.7032763957977

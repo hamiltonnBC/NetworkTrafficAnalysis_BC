@@ -1,74 +1,51 @@
 from base64 import b64encode
+
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
+#import plotly.graph_objects as go
 import plotly.graph_objs as go
+import dash_html_components as html
+import dash_core_components as dcc
 
+import dash_bootstrap_components as dbc
 
 def create_app():
     """
     Create and configure the Dash app with the prepared data.
-    Returns:
-        dash.Dash: Configured Dash application
     """
     app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
-    # Create a container div with consistent styling
-    app.layout = html.Div(
-        style={
-            'maxWidth': '1200px',
-            'margin': '0 auto',
-            'padding': '20px',
-            'fontFamily': 'Arial, sans-serif'
-        },
-        children=[
-            dcc.Location(id='url', refresh=False),
-            html.H1(
-                'Network Traffic Analysis Dashboard',
-                style={
-                    'textAlign': 'center',
-                    'color': '#2c3e50',
-                    'marginBottom': '30px'
-                }
-            ),
-            dcc.Tabs(
-                id='tabs',
-                value='/overview',
-                style={
-                    'marginBottom': '20px'
-                },
-                children=[
-                    dcc.Tab(label='Overview', value='/overview'),
-                    dcc.Tab(label='Protocol Distribution', value='/protocol-distribution'),
-                    dcc.Tab(label='Security Concerns', value='/security-concerns'),
-                    dcc.Tab(label='IP & Port Analysis', value='/ip-port-analysis'),
-                    dcc.Tab(label='Anomaly Analysis', value='/anomaly-analysis'),
-                    dcc.Tab(label='Methodology', value='/methodology'),
-                    dcc.Tab(label='Conclusion', value='/conclusion'),
-                    dcc.Tab(label='Meet the Team & Sources', value='/team'),
-                ]
-            ),
-            html.Div(id='page-content')
-        ]
-    )
+    app.layout = html.Div([
+        dcc.Location(id='url', refresh=False),
+        html.H1('Network Traffic Analysis Dashboard'),
+        dcc.Tabs([
+            dcc.Tab(label='Overview', value='/overview'),
+            dcc.Tab(label='Protocol Distribution', value='/protocol-distribution'),
+            dcc.Tab(label='Security Concerns', value='/security-concerns'),
+            #dcc.Tab(label='Traffic Patterns', value='/traffic-patterns'),
+            dcc.Tab(label='IP & Port Analysis', value='/ip-port-analysis'),
+            dcc.Tab(label='Anomaly Analysis', value='/anomaly-analysis'),
+            dcc.Tab(label='Methodology', value='/methodology'),
+            dcc.Tab(label='Conclusion', value='/conclusion'),
+            dcc.Tab(label='Meet the Team & Sources', value='/team'),
+        ], id='tabs', value='/overview'),
+
+        html.Div(id='page-content')
+    ])
 
     @app.callback(Output('page-content', 'children'), Input('tabs', 'value'))
     def display_page(tab):
-        """
-        Callback to update page content based on selected tab.
-        Args:
-            tab (str): Selected tab value
-        Returns:
-            dash component: Page content for selected tab
-        """
         if tab == '/overview':
             return create_overview_layout()
         elif tab == '/protocol-distribution':
             return create_protocol_distribution_layout()
         elif tab == '/security-concerns':
             return create_security_concerns_layout()
+        elif tab == '/traffic-patterns':
+            return create_traffic_patterns_layout()
         elif tab == '/ip-port-analysis':
             return create_ip_port_analysis_layout()
         elif tab == '/methodology':
@@ -80,93 +57,87 @@ def create_app():
         elif tab == '/team':
             return create_team_layout()
         else:
-            return html.Div('404 - Page not found', style={'textAlign': 'center'})
+            return '404'
 
     return app
 
 
-def create_styled_card(title, content, extra_style=None):
-    """
-    Create a styled card component to replace dbc.Card
-    Args:
-        title (str): Card title
-        content (list): Card content components
-        extra_style (dict, optional): Additional styling
-    Returns:
-        html.Div: Styled card component
-    """
-    base_style = {
-        'border': '1px solid #dee2e6',
-        'borderRadius': '0.25rem',
-        'marginBottom': '1rem',
-        'backgroundColor': 'white',
-    }
-
-    if extra_style:
-        base_style.update(extra_style)
-
-    return html.Div(
-        style=base_style,
-        children=[
-            html.Div(
-                html.H3(title),
-                style={
-                    'borderBottom': '1px solid #dee2e6',
-                    'padding': '0.75rem 1.25rem',
-                    'backgroundColor': '#f8f9fa'
-                }
-            ),
-            html.Div(
-                content,
-                style={'padding': '1.25rem'}
-            )
-        ]
-    )
-
-
-def create_styled_table(df):
-    """
-    Create a styled table component to replace dbc.Table
-    Args:
-        df (pandas.DataFrame): Data to display in table
-    Returns:
-        html.Table: Styled table component
-    """
-    return html.Table(
-        [
-            html.Thead(
-                html.Tr([html.Th(col) for col in df.columns])
-            ),
-            html.Tbody([
-                html.Tr([html.Td(df.iloc[i][col]) for col in df.columns])
-                for i in range(len(df))
-            ])
-        ],
-        style={
-            'width': '100%',
-            'borderCollapse': 'collapse',
-            'marginBottom': '1rem',
-            'border': '1px solid #dee2e6'
-        }
-    )
-
-
-# Create the overview layout
 def create_overview_layout():
+    """
+    Create the layout for the Overview page with a Technologies Used section.
+    """
     return html.Div([
         html.H2('Overview'),
-        create_styled_card(
-            "Welcome to our Network Traffic Analysis Dashboard!",
-            [
-                html.P(
-                    "This project focuses on the capture and analysis of network traffic packets in a secure virtual environment. Using virtual machines and tools like QEMU alongside the CMU GHOSTS program, we simulate user activity to ethically collect and analyze packet data."
-                ),
-                html.P(
-                    "Our analysis leverages Python libraries such as Scapy and Pandas to identify trends, outliers, and potential security vulnerabilities. We also employ the Isolation Forest machine learning algorithm for advanced anomaly detection."
-                )
-            ]
+
+        html.H2('Welcome to our Network Traffic Analysis Dashboard!'),
+        html.P(
+            "This project focuses on the capture and analysis of network traffic packets in a secure virtual environment. Using virtual machines and tools like QEMU alongside the CMU GHOSTS program, we simulate user activity to ethically collect and analyze packet data."),
+        html.P(
+            "Our analysis leverages Python libraries such as Scapy and Pandas to identify trends, outliers, and potential security vulnerabilities. We also employ the Isolation Forest machine learning algorithm for advanced anomaly detection. Key findings include the prevalence of insecure encryption protocols and the detection of cleartext passwords, highlighting the hidden risks in network communications."),
+        html.P(
+            "This dashboard visualizes our insights, empowering users to understand the complexities of their network traffic and the importance of robust online security practices."),
+
+        # Use dcc.Graph to create a side-by-side layout
+        dcc.Graph(
+            figure={
+                'data': [],
+                'layout': {
+                    'xaxis': {'visible': False},
+                    'yaxis': {'visible': False},
+                    'annotations': [
+                        {
+                            'x': 0,
+                            'y': 1,
+                            'xref': 'paper',
+                            'yref': 'paper',
+                            'text': '<b style="font-size: 20px;">Basic Statistics</b><br><br>' +
+                                    f"<span style='font-size: 16px;'>" +
+                                    f"Total packets analyzed: 1,122,966<br>" +
+                                    f"Time range: 2024-10-03 08:19:00 to 2024-10-03 08:58:44<br>" +
+                                    f"Duration: 0.66 hours<br>" +
+                                    f"Unique IP sources: 834<br>" +
+                                    f"Unique IP destinations: 835<br>" +
+                                    f"Average packet size: 1,030.01 bytes<br>" +
+                                    f"Median packet size: 722.00 bytes<br>" +
+                                    f"Minimum packet size: 54 bytes<br>" +
+                                    f"Maximum packet size: 65,226 bytes</span>",
+                            'showarrow': False,
+                            'align': 'left',
+                            'valign': 'top',
+                        },
+                        {
+                            'x': 1,
+                            'y': 1,
+                            'sizex': 5.7,
+                            'sizey': 5.7,
+                            'xref': 'paper',
+                            'yref': 'paper',
+                            'text': '<b style="font-size: 24px;">Technologies Used</b>',
+                            'showarrow': False,
+                            'align': 'center',
+                            'valign': 'top',
+                        },
+                    ],
+                    'images': [
+                        {
+                            'source': '/assets/technologies.png',
+                            'xref': 'paper',
+                            'yref': 'paper',
+                            'x': 0.4,
+                            'y': 0.9,
+                            'sizex': 0.7,
+                            'sizey': 0.7,
+                            'sizing': 'contain',
+                            'opacity': 1,
+                            'layer': 'above'
+                        }
+                    ]
+                }
+            },
+            style={'height': '1000px'}
         )
     ])
+
 
 
 def create_protocol_distribution_layout():
@@ -594,83 +565,138 @@ def create_methodology_layout():
     ])
 
 def create_team_layout():
-    """
-    Create the team and sources layout without Bootstrap dependencies.
-    """
     return html.Div([
-        # Main container
-        html.Div([
-            # Grid layout using CSS Grid
-            html.Div([
-                # Team Members Column
-                html.Div([
-                    html.H2('Meet the Team', style={'fontSize': '36px', 'marginBottom': '30px'}),
-                    html.H3('Team Members', style={'fontSize': '28px', 'marginBottom': '20px'}),
-                    html.Ul([
-                        html.Li([
-                            html.Span('Orion Musselman - Project Manager & Network Analyst', style={'fontSize': '20px'}),
-                            html.Br(),
-                            html.Span('Email: ', style={'fontWeight': 'bold'}),
-                            html.Span('musselmano@berea.edu', style={'fontSize': '18px'}),
-                            html.Br(),
-                            html.Span('GitHub: ', style={'fontWeight': 'bold'}),
-                            html.A('KeinR', href='https://github.com/KeinR', target='_blank', style={'fontSize': '18px'})
-                        ], style={'marginBottom': '20px'}),
-                        html.Li([
-                            html.Span('Nicholas Hamilton - Data Analyst & Python Developer', style={'fontSize': '20px'}),
-                            html.Br(),
-                            html.Span('Email: ', style={'fontWeight': 'bold'}),
-                            html.Span('hamiltonn428@gmail.com', style={'fontSize': '18px'}),
-                            html.Br(),
-                            html.Span('Website: ', style={'fontWeight': 'bold'}),
-                            html.A('nicholastreyhamilton.me', href='https://nicholastreyhamilton.me', target='_blank',
-                                   style={'fontSize': '18px'}),
-                            html.Br(),
-                            html.Span('GitHub: ', style={'fontWeight': 'bold'}),
-                            html.A('HamiltonnBC', href='https://github.com/HamiltonnBC', target='_blank',
-                                   style={'fontSize': '18px'})
-                        ], style={'marginBottom': '20px'})
-                    ], style={'listStyleType': 'none', 'padding': '0'})
-                ], style={'width': '33%', 'display': 'inline-block', 'verticalAlign': 'top'}),
+        dbc.Row([
+            # Team Members Column
+            dbc.Col([
+                html.H2('Meet the Team', style={'fontSize': '36px', 'marginBottom': '30px'}),
+                html.H3('Team Members', style={'fontSize': '28px', 'marginBottom': '20px'}),
+                html.Ul([
+                    html.Li([
+                        html.Span('Orion Musselman - Project Manager & Network Analyst', style={'fontSize': '20px'}),
+                        html.Br(),
+                        html.Span('Email: ', style={'fontWeight': 'bold'}),
+                        html.Span('musselmano@berea.edu', style={'fontSize': '18px'}),
+                        html.Br(),
+                        html.Span('GitHub: ', style={'fontWeight': 'bold'}),
+                        html.A('KeinR', href='https://github.com/KeinR', target='_blank', style={'fontSize': '18px'})
+                    ], style={'marginBottom': '20px'}),
+                    html.Li([
+                        html.Span('Nicholas Hamilton - Data Analyst & Python Developer', style={'fontSize': '20px'}),
+                        html.Br(),
+                        html.Span('Email: ', style={'fontWeight': 'bold'}),
+                        html.Span('hamiltonn428@gmail.com', style={'fontSize': '18px'}),
+                        html.Br(),
+                        html.Span('Website: ', style={'fontWeight': 'bold'}),
+                        html.A('nicholastreyhamilton.me', href='https://nicholastreyhamilton.me', target='_blank',
+                               style={'fontSize': '18px'}),
+                        html.Br(),
+                        html.Span('GitHub: ', style={'fontWeight': 'bold'}),
+                        html.A('HamiltonnBC', href='https://github.com/HamiltonnBC', target='_blank',
+                               style={'fontSize': '18px'})
+                    ], style={'marginBottom': '20px'})
+                ], style={'listStyleType': 'none', 'padding': '0'}),
+            ], width=4),
 
-                # Sources Column
+            # Sources Column
+            dbc.Col([
+                html.H2('Sources', style={'fontSize': '36px', 'marginBottom': '30px'}),
                 html.Div([
-                    html.H2('Sources', style={'fontSize': '36px', 'marginBottom': '30px'}),
-                    html.Div([
-                        # Sources content (your existing links)
-                        html.P(html.A("10 minutes to pandas", href="https://pandas.pydata.org/docs/user_guide/10min.html",
-                                      target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
-                        # ... (rest of your sources)
-                    ], style={'height': '500px', 'overflowY': 'scroll'})
-                ], style={'width': '33%', 'display': 'inline-block', 'verticalAlign': 'top'}),
+                    html.P(html.A("10 minutes to pandas", href="https://pandas.pydata.org/docs/user_guide/10min.html",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Analyzing packet captures with python",
+                                  href="https://vnetman.github.io/pcap/python/pyshark/scapy/libpcap/2018/10/25/analyzing-packet-captures-with-python-part-1.html",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P([html.Span("Castillo, D. (2023, March 17). "),
+                            html.A("Develop data visualization interfaces in python with dash",
+                                   href="https://realpython.com/python-dash/", target="_blank")],
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Dash in 20 minutes", href="https://dash.plotly.com/tutorial", target="_blank"),
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Emagined security: Cybersecurity Solutions", href="https://www.emagined.com/",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P([html.Span("Ferdous, T. (2023, August 1). "),
+                            html.A("A practical guide to regular expressions – learn regex with real life examples",
+                                   href="https://www.freecodecamp.org/news/practical-regex-guide-with-real-life-examples/",
+                                   target="_blank")], style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("How to extract an SSL/TLS message using Scapy and python?",
+                                  href="https://stackoverflow.com/questions/51423507/how-to-extract-an-ssl-tls-message-using-scapy-and-python",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P([html.Span("Intect, T. (2024, August 8). "), html.A("Python for Network Traffic Analysis",
+                                                                               href="https://medium.com/@info_82002/python-for-network-traffic-analysis-2386b8d6144e",
+                                                                               target="_blank")],
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P([html.Span("Jaiswal, S. (2020, June 10). "),
+                            html.A("Python regular expression tutorial with Re Library examples",
+                                   href="https://www.datacamp.com/community/tutorials/python-regular-expression-tutorial",
+                                   target="_blank")], style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P([html.Span("Jun, C. M. (2024, March 18). "),
+                            html.A("Viewing a list of TLS/SSL ciphers offered by clients",
+                                   href="https://www.baeldung.com/linux/list-tls-ssl-ciphers-clients",
+                                   target="_blank")], style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A(
+                        "KimiNewt/pyshark: Python wrapper for tshark, allowing python packet parsing using Wireshark dissectors",
+                        href="https://github.com/KimiNewt/pyshark/", target="_blank"),
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Pandas.dataframe.resample",
+                                  href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Scapy.layers.tls.handshake",
+                                  href="https://scapy.readthedocs.io/en/latest/api/scapy.layers.tls.handshake.html",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Security/Cipher Suites", href="https://wiki.mozilla.org/Security/Cipher_Suites",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Standards", href="https://standards-oui.ieee.org/oui/oui.txt", target="_blank"),
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Transport Layer Security (TLS) parameters",
+                                  href="https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Network packet analysis with Scapy: A beginner's guide",
+                                  href="https://codewithgolu.com/python/network-packet-analysis-with-scapy-a-beginner-s-guide/",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("Welcome to Scapy's documentation!",
+                                  href="https://scapy.readthedocs.io/en/latest/index.html", target="_blank"),
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("What cryptographic algorithms are not considered secure?",
+                                  href="https://security.stackexchange.com/questions/78/what-cryptographic-algorithms-are-not-considered-secure",
+                                  target="_blank"), style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P([html.Span("Willems, K. (2022, December 12). "),
+                            html.A("Pandas tutorial: DataFrames in python",
+                                   href="https://www.datacamp.com/tutorial/pandas-tutorial-dataframe-python",
+                                   target="_blank")], style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A(
+                        "PROTOCOL STANDARD FOR A NetBIOS SERVICE ON A TCP/UDP TRANSPORT: DETAILED SPECIFICATIONS",
+                        href="https://www.ietf.org/rfc/rfc1002.txt", target="_blank"),
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("YouTube", href="https://www.youtube.com/watch?v=Hc9_-ncr4nU", target="_blank"),
+                           style={'fontSize': '16px', 'marginBottom': '10px'}),
+                    html.P(html.A("YouTube", href="https://www.youtube.com/watch?v=hSPmj7mK6ng", target="_blank"),
+                           style={'fontSize': '16px', 'marginBottom': '10px'})
+                ], style={'height': '500px', 'overflowY': 'scroll'})
+            ], width=4),
 
-                # PDF Column
-                html.Div([
-                    html.Iframe(
-                        src='assets/450midtermSources.pdf',
-                        style={
-                            'width': '100%',
-                            'height': '500px',
-                            'border': 'none',
-                            'marginTop': '66px'
-                        }
-                    )
-                ], style={'width': '33%', 'display': 'inline-block', 'verticalAlign': 'top'})
-            ], style={
-                'display': 'flex',
-                'flexDirection': 'row',
-                'gap': '20px',
-                'padding': '20px'
-            })
+            # PDF Column
+            dbc.Col([
+                html.Iframe(
+                    src='assets/450midtermSources.pdf',
+                    style={
+                        'width': '100%',
+                        'height': '500px',  # Adjust this value to make it smaller or larger
+                        'border': 'none',
+                        'marginTop': '66px'  # Align with the "Sources" heading
+                    }
+                )
+            ], width=6)
         ])
-    ])
+    ], style={'padding': '20px'})
 
 def create_conclusion_layout():
     """
-    Create the Security Recommendations and Conclusion page without Bootstrap dependencies.
+    Create the layout for the Security Recommendations and Conclusion page.
     """
     return html.Div([
         html.H2('Security Recommendations and Conclusion'),
+
         html.H3('General Security Issues:'),
         html.Ul([
             html.Li("Use of Deprecated Protocols: 6,911 packets using the insecure SSLv2 protocol were detected."),
@@ -678,6 +704,7 @@ def create_conclusion_layout():
             html.Li(
                 "Weak Encryption Algorithms: Instances of weak encryption algorithms such as DES, RC4, MD5, SHA-1, and RSA with small key sizes were identified.")
         ]),
+
         html.H3('Recommendations for Students:'),
         html.Ul([
             html.Li(
@@ -687,6 +714,7 @@ def create_conclusion_layout():
             html.Li(
                 "Consider Open-Source Alternatives: If technically inclined, consider using open-source operating systems like Linux distributions for greater transparency and control over system security.")
         ]),
+
         html.H3('Recommendations for Network Administrators:'),
         html.Ul([
             html.Li(
@@ -700,57 +728,20 @@ def create_conclusion_layout():
         ])
     ])
 
-def create_styled_card_content(title, content, className=None):
-    """
-    Create a styled card without Bootstrap dependencies.
-    """
-    return html.Div([
-        html.Div([
-            html.H3(title, className="card-title")
-        ], style={
-            'borderBottom': '1px solid #dee2e6',
-            'padding': '1rem',
-            'backgroundColor': '#f8f9fa'
-        }),
-        html.Div(content, style={
-            'padding': '1rem'
-        })
-    ], style={
-        'border': '1px solid #dee2e6',
-        'borderRadius': '0.25rem',
-        'marginBottom': '1rem',
-        'backgroundColor': 'white'
-    })
+
 def create_anomaly_detection_layout():
     """
-    Create the Anomaly Detection page layout without Bootstrap dependencies.
+    Create the layout for the Anomaly Detection page in the Dash application.
     """
     # Load the CSV data
     df = pd.read_csv('assets/anomaly_summary.csv')
 
-    # Create a styled table
-    table = html.Table(
-        [
-            html.Thead(
-                html.Tr([html.Th(col, style={'padding': '0.75rem', 'backgroundColor': '#f8f9fa'}) for col in df.columns])
-            ),
-            html.Tbody([
-                html.Tr([
-                    html.Td(df.iloc[i][col], style={'padding': '0.75rem', 'borderTop': '1px solid #dee2e6'})
-                    for col in df.columns
-                ]) for i in range(len(df))
-            ])
-        ],
-        style={
-            'width': '100%',
-            'marginBottom': '1rem',
-            'backgroundColor': 'white',
-            'borderCollapse': 'collapse'
-        }
-    )
+    # Create a table from the CSV data
+    table = dbc.Table.from_dataframe(df, striped=True, bordered=True, hover=True)
 
     # Function to encode images
     def encode_image(image_file):
+
         with open(image_file, 'rb') as f:
             encoded = b64encode(f.read()).decode('ascii')
         return f'data:image/png;base64,{encoded}'
@@ -761,11 +752,11 @@ def create_anomaly_detection_layout():
     anomaly_scores = encode_image('assets/anomaly_scores_distribution.png')
 
     return html.Div([
-        html.H2('Anomaly Detection', style={'marginBottom': '1rem'}),
+        html.H2('Anomaly Detection', className='mb-4'),
 
-        create_styled_card_content(
-            "Isolation Forest Algorithm",
-            [
+        dbc.Card([
+            dbc.CardHeader(html.H3("Isolation Forest Algorithm", className="card-title")),
+            dbc.CardBody([
                 html.P([
                     "The Isolation Forest algorithm is an unsupervised machine learning technique used for anomaly detection. ",
                     "It operates on the principle that anomalies are rare and different, making them easier to isolate in a dataset ",
@@ -780,34 +771,34 @@ def create_anomaly_detection_layout():
                     html.Li("Robustness against irrelevant features"),
                     html.Li("Scalability for large datasets")
                 ])
-            ]
-        ),
+            ])
+        ], className='mb-4'),
 
-        create_styled_card_content(
-            "Anomaly Detection Results",
-            [
+        dbc.Card([
+            dbc.CardHeader(html.H3("Anomaly Detection Results", className="card-title")),
+            dbc.CardBody([
                 html.H4("Summary Statistics"),
                 table,
                 html.P("This table shows the mean values for normal and anomalous data points, as well as the difference between them for each feature."),
                 html.H4("Visualizations"),
                 html.Div([
-                    html.Img(src=correlation_heatmap, style={'width': '100%', 'maxWidth': '800px'}),
+                    html.Img(src=correlation_heatmap, style={'width': '100%', 'max-width': '800px'}),
                     html.P("This heatmap shows the correlation between different features in the dataset. Stronger correlations (positive or negative) are represented by darker colors."),
-                ], style={'marginBottom': '1rem'}),
+                ], className='mb-4'),
                 html.Div([
-                    html.Img(src=anomalies_scatter, style={'width': '100%', 'maxWidth': '800px'}),
+                    html.Img(src=anomalies_scatter, style={'width': '100%', 'max-width': '800px'}),
                     html.P("This scatter plot shows the distribution of normal (blue) and anomalous (red) data points based on the two most important features."),
-                ], style={'marginBottom': '1rem'}),
+                ], className='mb-4'),
                 html.Div([
-                    html.Img(src=anomaly_scores, style={'width': '100%', 'maxWidth': '800px'}),
+                    html.Img(src=anomaly_scores, style={'width': '100%', 'max-width': '800px'}),
                     html.P("This histogram shows the distribution of anomaly scores. Normal data points are shown in blue, while anomalous points are in red."),
-                ], style={'marginBottom': '1rem'})
-            ]
-        ),
+                ], className='mb-4'),
+            ])
+        ], className='mb-4'),
 
-        create_styled_card_content(
-            "Explanation of Results",
-            [
+        dbc.Card([
+            dbc.CardHeader(html.H3("Explanation of Results", className="card-title")),
+            dbc.CardBody([
                 html.P([
                     "The Isolation Forest algorithm has been applied to our network traffic data to identify potential anomalies. ",
                     "Here's how to interpret the results:"
@@ -835,9 +826,10 @@ def create_anomaly_detection_layout():
                     "It's important to note that not all detected anomalies necessarily represent threats or issues. ",
                     "They are points of interest that warrant further investigation to understand their nature and potential impact on network security or performance."
                 ])
-            ]
-        )
-    ], style={'padding': '20px'})
+            ])
+        ])
+    ])
+
 def main():
     """
     Main function to run the Dash app.
